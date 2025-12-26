@@ -1,6 +1,7 @@
 package learn.library.controller;
 
 import learn.library.excentionhandler.AlreadyExcention;
+import learn.library.excentionhandler.NotFountException;
 import learn.library.model.error.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,7 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class RestControllerhandler{
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex){
-        ErrorResponse errorResponse=new ErrorResponse().builder()
+        new ErrorResponse();
+        ErrorResponse errorResponse= ErrorResponse.builder()
                 .message(ex.getMessage())
                 .status((short) 500)
                 .build();
@@ -18,10 +20,19 @@ public class RestControllerhandler{
     }
     @ExceptionHandler(AlreadyExcention.class)
     public ResponseEntity<ErrorResponse> handleAlreadyExcention(AlreadyExcention ex){
-        ErrorResponse errorResponse=new ErrorResponse().builder()
+        new ErrorResponse();
+        ErrorResponse errorResponse= ErrorResponse.builder()
                 .message(ex.getMessage())
                 .status((short) 409)
                 .build();
         return ResponseEntity.status(409).body(errorResponse);
+    }
+    @ExceptionHandler(NotFountException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyExcention(NotFountException ex){
+        ErrorResponse errorResponse= ErrorResponse.builder()
+                .message(ex.getMessage())
+                .status((short) 404)
+                .build();
+        return ResponseEntity.status(404).body(errorResponse);
     }
 }
